@@ -1,0 +1,76 @@
+<head>
+  <meta http-http-equiv="refresh" content="600">
+</head>
+
+<center>
+  <img src="#" alt = "space?" id="cimg" width="500" height="500">
+</center>
+
+<script>
+function lzero(n){ // appending leading zero //
+  if(n <= 9){      // https://codehandbook.org/javascript-date-format/
+    return "0" + n;
+  }
+  return n
+}
+function daysIntoYear(date){ // days into year //
+    return (Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) - Date.UTC(date.getUTCFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
+    // https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
+}
+function minFloored(min){ // round given time to 10min intervals //
+    min = Math.floor(min/10); // converts minutes into decimal to round down
+    return min *= 10;         // reverts floored decimal to minutes
+}
+
+
+// CONFIGURATION
+  var rollback = 30;      // Number of minutes to rollback
+  const adjust = 0;       // Minutes to adjust post-round
+
+// Relation to PST
+  var d = new Date();
+// Relation to UTC
+  var year = d.getUTCFullYear();
+  var month = d.getUTCMonth();
+  var date = d.getUTCDate();
+  var hours = d.getUTCHours();
+  var mins = d.getUTCMinutes();
+  var julianDate = daysIntoYear(d);
+
+function formatTime(hours, mins){ // takes input and formats to HHMM, subtracting rollback //
+  // console.log(`FORMATTING: ${hours}:${mins}`)
+  var wRoll = mins - rollback;   // Determinant if rollback changes hour
+
+  if (wRoll < 0){
+    // Having negative minutes after rollback implies moving back an hour
+    console.log('Rollback applied, reached into previous hour.');
+    hours -= 1;                  // So we set hour back one
+    if (hours == -1){
+      console.log('Rollback occured during 00hrs.');
+      hours = 23;                // (ex. 00:00 (midnight) - 1hr [should be] 23:00 (11:00pm))
+    }
+    mins -= rollback;            // Results in negative minutes
+    mins += 60;                  // Counteracting by adding 60 (ex: 00:10-*00:30* -> 23:[-20]+*00:60* -> 23:40)
+  }
+
+  if (wRoll >= 0){
+    console.log('Rollback applied, hour maintained.');
+    mins -= rollback;
+  }
+
+  return `${lzero(hours)}${lzero(minFloored(mins))}`
+}
+
+  var formattedtime = formatTime(hours, mins);
+
+// LINK CONFIGURATION
+  var timeblock = `${year}${julianDate}${formattedtime}`; // place timeblock into link: YYYYDDDHHMM (UTC)
+  var link = `https://cdn.star.nesdis.noaa.gov/GOES17/ABI/SECTOR/wus/GEOCOLOR/${timeblock}_GOES17-ABI-wus-GEOCOLOR-1000x1000.jpg`;
+  document.getElementById('cimg').src = link;
+
+// DEBUG: logging
+  console.log(`LOCAL DATE: ${d}`);
+  console.log(`UTC DATE: (d${julianDate}) ${lzero(month + 1)}.${lzero(date)}.${year} ${lzero(hours)}:${lzero(mins)}`);
+  console.log(`FORMATED TIME: ${formatTime(hours, mins)} / ORIGINAL: ${lzero(hours)}${lzero(mins)} [ROLLBACK: ${rollback}]`);
+  console.log(`LINK: ${link}`);
+</script>
