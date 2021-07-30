@@ -1,9 +1,10 @@
 <head>
-  <meta http-http-equiv="refresh" content="600">
+  <!-- Auto-Refresh every 600 seconds (10 minutes) -->
+    <meta http-http-equiv="refresh" content="600">
 </head>
 
 <center>
-  <img src="#" alt = "space?" id="cimg">
+  <img src="#" alt = "space? what is space?" id="cimg">
 </center>
 
 <script>
@@ -58,7 +59,7 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
     mins -= rollback;
   }
 
-  return `${lzero(hours)}${lzero(minFloored(mins))}`
+  return `${lzero(hours)}${lzero(minFloored(mins))}`;
 }
 
   var formattedtime = formatTime(hours, mins);
@@ -74,3 +75,4 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
   console.log(`FORMATED TIME: ${formatTime(hours, mins)} / ORIGINAL: ${lzero(hours)}${lzero(mins)} [ROLLBACK: ${rollback}]`);
   console.log(`LINK: ${link}`);
 </script>
+
