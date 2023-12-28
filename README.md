@@ -1,5 +1,5 @@
 # goes-viewer
 Getting satellite images with JavaScript!
 
-NOAA provides a [GOES image viewer](https://www.star.nesdis.noaa.gov/GOES/index.php), providing images and animations for different regions covered by the GOES 16 and 17 satellites (much of North and South America)
+NOAA [GOES image viewer](https://www.star.nesdis.noaa.gov/GOES/index.php), providing satellite imagery and timelapses for different regions covered by the GOES satellites (within North America, South America, Pacific Ocean, Atlantic Ocean) 
 
