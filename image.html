@@ -8,25 +8,25 @@
 </center>
 
 <script>
-function lzero(n){ // appending leading zero //
+function lzero(n){ // APPENDING LEADING ZERO //
   if(n <= 9){      // https://codehandbook.org/javascript-date-format/
     return "0" + n;
   }
   return n
 }
-function daysIntoYear(date){ // days into year //
+function daysIntoYear(date){ // DAYS INTO YEAR //
     return (Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) - Date.UTC(date.getUTCFullYear(), 0, 0)) / 24 / 60 / 60 / 1000;
     // https://stackoverflow.com/questions/8619879/javascript-calculate-the-day-of-the-year-1-366
 }
-function minFloored(min){ // round given time to 10min intervals //
+function minFloored(min){ // ROUND GIVEN TIME TO 10 MIN INTERVALS //
     min = Math.floor(min/10); // converts minutes into decimal to round down
     return min *= 10;         // reverts floored decimal to minutes
 }
 
 
 // CONFIGURATION
-  var rollback = 30;      // Number of minutes to rollback
-  const adjust = 0;       // Minutes to adjust post-round
+  var rollback = 30;      // Number of minutes to rollback // **PURPOSE: images from GOES typically 30mins behind current time**
+  const adjust = 0;       // Minutes to adjust after rounding
 
 // Relation to PST
   var d = new Date();
@@ -49,6 +49,7 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
     if (hours == -1){
       console.log('Rollback occured during 00hrs.');
       hours = 23;                // (ex. 00:00 (midnight) - 1hr [should be] 23:00 (11:00pm))
+      julianDate -= 1;           // Accounts for change in day when moving back 1hr from 00 
     }
     mins -= rollback;            // Results in negative minutes
     mins += 60;                  // Counteracting by adding 60 (ex: 00:10-*00:30* -> 23:[-20]+*00:60* -> 23:40)
@@ -58,7 +59,7 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
     console.log('Rollback applied, hour maintained.');
     mins -= rollback;
   }
-
+  
   return `${lzero(hours)}${lzero(minFloored(mins))}`;
 }
 
@@ -75,4 +76,3 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
   console.log(`FORMATED TIME: ${formatTime(hours, mins)} / ORIGINAL: ${lzero(hours)}${lzero(mins)} [ROLLBACK: ${rollback}]`);
   console.log(`LINK: ${link}`);
 </script>
-
