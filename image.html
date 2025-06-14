@@ -8,7 +8,9 @@
 </center>
 
 <script>
-function lzero(n){ // APPENDING LEADING ZERO //
+
+// ** APPENDING LEADING ZERO ** //
+function lzero(n){ 
   if(n <= 9){      // https://codehandbook.org/javascript-date-format/
     return "0" + n;
   }
@@ -24,11 +26,11 @@ function minFloored(min){ // ROUND GIVEN TIME TO 10 MIN INTERVALS //
 }
 
 
-// CONFIGURATION
+// ** CONFIGURATION ** //
   var rollback = 30;      // Number of minutes to rollback // **PURPOSE: images from GOES typically 30mins behind current time**
   const adjust = 0;       // Minutes to adjust after rounding
 
-// Relation to PST
+// Relation to local time
   var d = new Date();
 // Relation to UTC
   var year = d.getUTCFullYear();
@@ -65,9 +67,19 @@ function formatTime(hours, mins){ // takes input and formats to HHMM, subtractin
 
   var formattedtime = formatTime(hours, mins);
 
-// LINK CONFIGURATION
+// ** LINK CONFIGURATION ** //
+  const queryString = window.location.search;
+  console.log(queryString);
+  const urlParams = new URLSearchParams(queryString);
+
+  var satellite = urlParams.get('satellite');
+  var sector = urlParams.get('sector');
+  var product = urlParams.get('product');
+  var resolution = urlParams.get('resolution');
+  
   var timeblock = `${year}${julianDate}${formattedtime}`; // place timeblock into link: YYYYDDDHHMM (UTC)
-  var link = `https://cdn.star.nesdis.noaa.gov/GOES18/ABI/SECTOR/wus/GEOCOLOR/${timeblock}_GOES18-ABI-wus-GEOCOLOR-4000x4000.jpg`;
+  var imgSuffix = `${satellite}-ABI-${sector}-${product}-${resolution}.jpg`
+  var link = `https://cdn.star.nesdis.noaa.gov/${satellite}/ABI/SECTOR/${sector}/${product}/${timeblock}_${imgSuffix}`;
   document.getElementById('cimg').src = link;
 
 // DEBUG: logging
